@@ -1,0 +1,76 @@
+Using the default profile...
+Feature: Create Blog
+  As an author
+  In order to gift my thoughts to the world
+  I want to create a blog
+
+  Scenario: Create blog page shown      # features/create_blog.feature:6
+    Given I am on the home page         # features/step_definitions/web_steps.rb:68
+    Then I should see "Welcome"         # features/step_definitions/web_steps.rb:129
+    And I should see "My Shiny Weblog!" # features/step_definitions/web_steps.rb:129
+
+  Scenario: Create blog page not shown when blog created # features/create_blog.feature:11
+    Given the blog is set up                             # features/step_definitions/web_steps.rb:34
+    When I am on the home page                           # features/step_definitions/web_steps.rb:68
+    Then I should not see "My Shiny Weblog!"             # features/step_definitions/web_steps.rb:147
+    And I should see "Teh Blag"                          # features/step_definitions/web_steps.rb:129
+
+Feature: Manage Category
+  As an administrator
+  I want to manage blog category
+
+  Background:                            # features/manage_category.feature:5
+    Given the blog is set up             # features/step_definitions/web_steps.rb:34
+    And I am logged into the admin panel # features/step_definitions/web_steps.rb:46
+
+  Scenario: Succesfully go to the admin page # features/manage_category.feature:9
+    When I go to the admin page              # features/step_definitions/web_steps.rb:72
+    Then I should see "Welcome back, admin!" # features/step_definitions/web_steps.rb:129
+
+  Scenario: Succesfully go to the new category page # features/manage_category.feature:13
+    When I go to the new category page              # features/step_definitions/web_steps.rb:72
+    Then I should see "Categories"                  # features/step_definitions/web_steps.rb:129
+
+  Scenario: Succesfully create category             # features/manage_category.feature:17
+    When I go to the new category page              # features/step_definitions/web_steps.rb:72
+    And I fill in "category_name" with "Music"      # features/step_definitions/web_steps.rb:84
+    And I fill in "category_description" with "All" # features/step_definitions/web_steps.rb:84
+    And I press "Save"                              # features/step_definitions/web_steps.rb:76
+    Then I should be on the new category page       # features/step_definitions/web_steps.rb:254
+    And I should see "Music"                        # features/step_definitions/web_steps.rb:129
+    And I should see "All"                          # features/step_definitions/web_steps.rb:129
+
+  Scenario: Succesfully edit category              # features/manage_category.feature:26
+    When I go to the new category page             # features/step_definitions/web_steps.rb:72
+    And I fill in "category_name" with "Music"     # features/step_definitions/web_steps.rb:84
+    And I press "Save"                             # features/step_definitions/web_steps.rb:76
+    Then I should be on the new category page      # features/step_definitions/web_steps.rb:254
+    When I follow "Music"                          # features/step_definitions/web_steps.rb:80
+    And I fill in "category_name" with "all music" # features/step_definitions/web_steps.rb:84
+    And I press "Save"                             # features/step_definitions/web_steps.rb:76
+    Then I should be on the new category page      # features/step_definitions/web_steps.rb:254
+    And I should see "all music"                   # features/step_definitions/web_steps.rb:129
+
+Feature: Write Articles
+  As a blog administrator
+  In order to share my thoughts with the world
+  I want to be able to add articles to my blog
+
+  Background:                            # features/write_article.feature:6
+    Given the blog is set up             # features/step_definitions/web_steps.rb:34
+    And I am logged into the admin panel # features/step_definitions/web_steps.rb:46
+
+  Scenario: Successfully write articles                                  # features/write_article.feature:10
+    Given I am on the new article page                                   # features/step_definitions/web_steps.rb:68
+    When I fill in "article_title" with "Foobar"                         # features/step_definitions/web_steps.rb:84
+    And I fill in "article__body_and_extended_editor" with "Lorem Ipsum" # features/step_definitions/web_steps.rb:84
+    And I press "Publish"                                                # features/step_definitions/web_steps.rb:76
+    Then I should be on the admin content page                           # features/step_definitions/web_steps.rb:254
+    When I go to the home page                                           # features/step_definitions/web_steps.rb:72
+    Then I should see "Foobar"                                           # features/step_definitions/web_steps.rb:129
+    When I follow "Foobar"                                               # features/step_definitions/web_steps.rb:80
+    Then I should see "Lorem Ipsum"                                      # features/step_definitions/web_steps.rb:129
+
+7 scenarios (7 passed)
+46 steps (46 passed)
+0m4.133s
